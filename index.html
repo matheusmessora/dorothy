@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Title of the document</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+	        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js"></script>
+
+	<style>
+
+		body {
+			background-color: #000;
+			color: #FFF;
+		}
+		h1 {
+			text-align: center;
+		}
+
+		h2 {
+			text-align: center;
+			font-size: 1.5em;
+			padding: 0;
+			margin: 0;
+		}
+		h2.warning {
+			color: #FB8C00;
+		}
+		h2.danger {
+			color: #F44336;
+		}
+		h2.out-of-service {
+			font-size: 1.8em;
+		}
+
+		h3 {
+			text-align: center;
+			color: #F44336;
+		}
+
+		.glyphicon.danger {
+			color: #F44336;
+		}
+
+		.hexagon {
+			position: relative;
+			width: 45px;
+			height: 25.98px;
+			background-color: #2196F3;
+			margin: 12.99px 0;
+			border-left: solid 3px #CFD8DC;
+			border-right: solid 3px #CFD8DC;
+		}
+
+		.hexagon:before,
+		.hexagon:after {
+			content: "";
+			position: absolute;
+			z-index: 1;
+			width: 31.82px;
+			height: 31.82px;
+			-webkit-transform: scaleY(0.5774) rotate(-45deg);
+			-ms-transform: scaleY(0.5774) rotate(-45deg);
+			transform: scaleY(0.5774) rotate(-45deg);
+			background-color: inherit;
+			left: 3.5901px;
+		}
+
+		.hexagon:before {
+			top: -15.9099px;
+			border-top: solid 4.2426px #CFD8DC;
+			border-right: solid 4.2426px #CFD8DC;
+		}
+
+		.hexagon:after {
+			bottom: -15.9099px;
+			border-bottom: solid 4.2426px #CFD8DC;
+			border-left: solid 4.2426px #CFD8DC;
+		}
+
+
+		.hexagon {
+			margin: 15px 3px;
+			float:left;
+		}
+		.hexagon.warning {
+			background-color: #EF6C00;
+		}
+		.hexagon.danger {
+			background-color: #C62828;
+		}
+
+
+		.service {
+			-webkit-transition: all 0.5s ease-in-out;
+			-ms-transition:     all 0.5s ease-in-out;
+			transition:         all 0.5s ease-in-out;
+			padding: 10px;
+			/*border: 1px solid #616161;*/
+			margin-bottom: 15px;
+			background: #212121;
+		}
+
+		.widget {
+			border-radius: 5px;
+			padding: 15px 20px;
+			margin-bottom: 10px;
+			margin-top: 10px;
+			color: #FFF;
+			width: 100%;
+			background-color: #01579B;
+		}
+
+		.fs-4x {
+			font-size: 4em;
+		}
+		.fs-2x {
+			font-size: 2em;
+		}
+
+		#refresh {
+			cursor: pointer;
+		}
+
+
+	</style>
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>DATACENTER</h1>
+
+			<div class="row">
+				<div class="col-md-4">
+					<div class="widget">
+						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-cloud"></span></div>
+						<div class="col-md-8">
+							<div class="row  text-right">
+								<div class="col-md-12">
+									Hosts
+								</div>
+								<div id="qtd-hosts" class="col-md-12 fs-2x">
+									0
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="widget">
+						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-th-large"></span></div>
+						<div class="col-md-8">
+							<div class="row  text-right">
+								<div class="col-md-12 text-right">
+									Instances
+								</div>
+								<div id="qtd-instances"  class="col-md-12 fs-2x">
+									0
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="widget">
+						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-th-list"></span></div>
+						<div class="col-md-8">
+							<div class="row  text-right">
+								<div class="col-md-12">
+									Applications
+								</div>
+								<div id="qtd-applications" class="col-md-12 fs-2x">
+									0
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row">
+		<!--<div class="col-md-6">-->
+			<!--<div class="btn-toolbar" role="toolbar">-->
+				<!--<div class="btn-group" role="group"><span class="glyphicon glyphicon-search"></span> </div>-->
+			<!--</div>-->
+		<!--</div>-->
+		<div id="refresh" class="col-md-12 text-right">
+			Update interval 5 minutes <span class="glyphicon glyphicon-refresh"></span>
+		</div>
+	</div>
+
+	<div class="row">
+		<h1>SERVICES</h1>
+	</div>
+
+	<div class="row danger-host-map host-map"></div>
+
+	<div class="row warning-host-map host-map"></div>
+
+	<div class="row info-host-map host-map"></div>
+
+	<hr>
+
+	<footer>
+		<p>Powered by <a href="https://github.com/matheusmessora/dorothy">Dorothy</a> </p>
+	</footer>
+</div>
+
+<div id="application-map" style="display: none">
+	<div class="col-md-6">
+		<div class="service">
+			<div class="row">
+				<div class="col-md-11">
+					<h2 class="{{alert}}">{{name}}</h2>
+				</div>
+				<div class="col-md-1">
+					{{instances.length}}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="instance-container {{alert}}" id="{{name}}">
+						{{#instances}}
+						<a href="{{healthCheckUrl}}" target="_blank">
+							<div class="hexagon" id="instance-{{uid}}"></div>
+						</a>
+						{{/instances}}
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="application-out-of-service" style="display: none">
+	<div class="col-md-4">
+		<div class="service">
+			<div class="row">
+				<div class="col-md-12">
+					<h2 class="out-of-service">{{name}}</h2>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<h3>OUT OF SERVICE&nbsp;<span class="glyphicon glyphicon-exclamation-sign danger"></span> </h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+	INDEX.init();
+</script>
+
+</body>
+
+</html>
