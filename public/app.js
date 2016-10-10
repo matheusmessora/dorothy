@@ -6,7 +6,7 @@ var INDEX = (function () {
     function getMetric(url, instance, callback) {
 
         $.ajax({
-            url: CONFIG.host + "/metric?url=" + url,
+            url: "/metric?url=" + url,
             type: "GET",
             headers: {
                 Accept: "application/json; charset=utf-8",
@@ -54,7 +54,7 @@ var INDEX = (function () {
     function getApps(callback) {
 
         $.ajax({
-            url: CONFIG.host + "/eureka/apps",
+            url: "/eureka/apps",
             type: "GET",
             headers: {
                 Accept: "application/json; charset=utf-8",
@@ -192,14 +192,12 @@ var INDEX = (function () {
 
     function init() {
 
-        CONFIG.loadEurekaHost(function () {
+        loadApplications();
+        setInterval(function(){
             loadApplications();
-            setInterval(function(){
-                loadApplications();
-            },300000);
+        },300000);
 
-            bindRefreshButton();
-        });
+        bindRefreshButton();
     }
 
     return {
