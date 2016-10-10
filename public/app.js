@@ -192,12 +192,15 @@ var INDEX = (function () {
 
     function init() {
 
-        loadApplications();
-        setInterval(function(){
+        CONFIG.init(function(err) {
             loadApplications();
-        },300000);
+            setInterval(function(){
+                loadApplications();
+            },300000);
 
-        bindRefreshButton();
+            bindRefreshButton();
+        });
+
     }
 
     return {

@@ -4,20 +4,43 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'local';
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var mustacheExpress = require('mustache-express');
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+
 
 var app = express();
 
 app.set('port', (process.env.PORT || 3001));
 app.use(express.static('public'));
 
+// ######### MONGO
+var url = 'mongodb://192.168.99.100:27017/dorothy';
+MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    console.log("Connected successfully to MongoDB.", url);
+
+    db.close();
+});
+
+// Register '.mustache' extension with The Mustache Express
+app.engine('mustache', mustacheExpress());
+app.set('view engine', 'mustache');
+app.set('views', __dirname + '/views');
+
 // Initialize modules
 var eureka_host = (process.env.EUREKA_HOST || 'http://localhost:3001');
 var eureka_port = (process.env.EUREKA_PORT || '8761');
+var services = (process.env.SERVICES || 'APP1,APP2');
 var random = require('./src/randomService')();
 
 // Controllers
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+'/index.html'));
+});
+
+app.get('/api/services', function (req, res) {
+    res.send(services.split(","));
 });
 
 app.get('/eureka-host', function(req, res){
@@ -82,5 +105,6 @@ app.listen(app.get('port'), function () {
     console.log('APP STARTED. NODE_ENV=' + process.env.NODE_ENV);
     console.log('EUREKA_HOST=' + eureka_host);
     console.log('EUREKA_PORT=' + eureka_port);
+    console.log('SERVICES=' + services.split(","));
     console.log('Listening on port ' + app.get('port'));
 });

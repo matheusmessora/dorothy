@@ -1,0 +1,159 @@
+body {
+    background-color: #000;
+    color: #FFF;
+}
+h1 {
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.22em;
+    padding: 0;
+    margin: 0;
+}
+h2.warning {
+    color: #FB6900;
+}
+h2.danger {
+    color: #F63700;
+}
+h2.out-of-service {
+    font-size: 1.8em;
+}
+
+h3 {
+    text-align: center;
+    color: #F63700;
+}
+
+.glyphicon.danger {
+    color: #F63700;
+}
+
+.glyphicon-exclamation-sign {
+    color: #FB6900;
+}
+.glyphicon-fire {
+    color: #F63700;
+}
+
+
+.hexagon {
+    position: relative;
+    width: 45px;
+    height: 25.98px;
+    background-color: #00B9BD;
+    margin: 12.99px 0;
+    border-left: solid 3px #004853;
+    border-right: solid 3px #004853;
+}
+
+.hexagon:before,
+.hexagon:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    width: 31.82px;
+    height: 31.82px;
+    -webkit-transform: scaleY(0.5774) rotate(-45deg);
+    -ms-transform: scaleY(0.5774) rotate(-45deg);
+    transform: scaleY(0.5774) rotate(-45deg);
+    background-color: inherit;
+    left: 3.5901px;
+}
+
+.hexagon:before {
+    top: -15.9099px;
+}
+
+.hexagon:after {
+    bottom: -15.9099px;
+}
+
+
+.hexagon {
+    margin: 15px 3px;
+    float:left;
+}
+.hexagon:before {
+    border-top: solid 4.2426px #004853;
+    border-right: solid 4.2426px #004853;
+}
+.hexagon:after {
+    border-bottom: solid 4.2426px #004853;
+    border-left: solid 4.2426px #004853;
+}
+
+
+.hexagon.warning {
+    background-color: #FB6900;
+}
+.hexagon.danger {
+    background-color: #F63700;
+}
+
+
+.service {
+    -webkit-transition: all 0.5s ease-in-out;
+    -ms-transition:     all 0.5s ease-in-out;
+    transition:         all 0.5s ease-in-out;
+    padding: 10px;
+    /*border: 1px solid #616161;*/
+    margin-bottom: 15px;
+    background: #212121;
+}
+
+.widget {
+    border-radius: 5px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    color: #FFF;
+    width: 100%;
+    background-color: #004853;
+}
+
+.instance-info {
+    margin-top: 7px;
+    padding-top: 3px;
+    border-top: 1px solid #424242;
+    color: #F5F5F5;
+}
+
+.instance-cpu {
+    /*color: #00B9BD;*/
+}
+.fs-4x {
+    font-size: 4em;
+}
+.fs-2x {
+    font-size: 2em;
+}
+
+footer {
+    border-top: 1px solid #007E80;
+    margin-top: 25px;
+    padding-top: 14px;
+}
+
+#refresh {
+    cursor: pointer;
+}
+
+.navbar {
+    border-bottom: 2px solid #FB6900;
+}
+.navbar-default {
+    background-color: #212121;
+}
+.navbar-default .navbar-brand {
+    color: #E0E0E0;
+}
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    background-color: #212121;
+    color: #FFF;
+}
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    color: #FFF;
+}
