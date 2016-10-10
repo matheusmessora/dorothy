@@ -11,10 +11,18 @@ app.set('port', (process.env.PORT || 3001));
 app.use(express.static('public'));
 
 // Initialize modules
+var eureka_host = (process.env.EUREKA_HOST || 'http://localhost:3001');
+
 var random = require('./src/randomService')();
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+'/index.html'));
+});
+
+app.get('/eureka-host', function(req, res){
+    res.send(JSON.stringify({
+        host: eureka_host
+    }));
 });
 
 app.get('/eureka/apps', function (req, res) {
@@ -62,5 +70,6 @@ app.get('/metric', function (req, res) {
 
 app.listen(app.get('port'), function () {
     console.log('APP STARTED. NODE_ENV=' + process.env.NODE_ENV);
+    console.log('EUREKA_HOST=' + eureka_host);
     console.log('Listening on port ' + app.get('port'));
 });

@@ -3,7 +3,7 @@ var INDEX = (function () {
     var template = $("#application-map").html();
     var outOfServiceTemplate = $("#application-out-of-service").html();
 
-    function getMetric(url, uid, callback) {
+    function getMetric(url, instance, callback) {
 
         $.ajax({
             url: CONFIG.host + "/metric?url=" + url,
@@ -13,7 +13,7 @@ var INDEX = (function () {
                 "Content-Type": "application/json; charset=utf-8"
             },
             success: function(data, textStatus, jqXHR) {
-                callback(null, data, uid);
+                callback(null, data, instance);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("BAD REQUEST", jqXHR.responseJSON)
@@ -65,7 +65,7 @@ var INDEX = (function () {
         });
     }
 
-    function doCount(data){
+    function count(data){
         var applications = data.applications.application;
 
         var hostSet = new Set();
@@ -110,23 +110,25 @@ var INDEX = (function () {
 
             for (var j = 0; j < instances.length; j++) {
                 var instance = instances[j];
-                var uid = instance.statusPageUrl.replace(/[^a-z0-9]/gi,'');
-                instance.uid = uid;
+                instance.uid = instance.statusPageUrl.replace(/[^a-z0-9]/gi,'');
 
-                getMetric(instance.homePageUrl + "metrics", uid, function(err, data, id){
+                getMetric(instance.homePageUrl + "metrics", instance, function(err, data, instance){
                     if(err) {
                         console.error(err)
                         return;
                     }
 
-                    console.log(id, data['systemload.average'])
+                    // console.log(id, data['systemload.average'])
                     var cpuLoad = data['systemload.average'] * 100 / data.processors;
 
-                    if(cpuLoad > 90){
-                        $("#instance-" + id).addClass("danger");
-                    }else if(cpuLoad > 10){
-                        $("#instance-" + id).addClass("warning");
+                    if(cpuLoad > 125){
+                        $("#instance-" + instance.uid).addClass("danger");
+                    }else if(cpuLoad > 100){
+                        $("#instance-" + instance.uid).addClass("warning");
                     }
+
+
+                    CPU.countCores(instance.app, data.processors);
                 })
             }
 
@@ -151,6 +153,7 @@ var INDEX = (function () {
         $('.danger-host-map').html('');
         $('.info-host-map').html('');
 
+        CPU.reset();
         getApps(function(err, data){
             if(err) {
                 console.error(err)
@@ -159,7 +162,7 @@ var INDEX = (function () {
 
             console.log(data);
 
-            doCount(data);
+            count(data);
             hostMap(data);
             loadFixedServices();
 
@@ -178,14 +181,14 @@ var INDEX = (function () {
 
     function init() {
 
-        loadApplications();
-        setInterval(function(){
+        CONFIG.loadEurekaHost(function () {
             loadApplications();
-        },300000);
+            setInterval(function(){
+                loadApplications();
+            },300000);
 
-        bindRefreshButton();
-
-
+            bindRefreshButton();
+        });
     }
 
     return {

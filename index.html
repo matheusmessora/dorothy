@@ -140,7 +140,7 @@
 			<h1>DATACENTER</h1>
 
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<div class="widget">
 						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-cloud"></span></div>
 						<div class="col-md-8">
@@ -156,15 +156,15 @@
 						<div class="clearfix"></div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<div class="widget">
-						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-th-large"></span></div>
+						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-tasks"></span></div>
 						<div class="col-md-8">
 							<div class="row  text-right">
-								<div class="col-md-12 text-right">
-									Instances
+								<div class="col-md-12">
+									CPU
 								</div>
-								<div id="qtd-instances"  class="col-md-12 fs-2x">
+								<div id="qtd-cpu" class="col-md-12 fs-2x">
 									0
 								</div>
 							</div>
@@ -172,7 +172,7 @@
 						<div class="clearfix"></div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<div class="widget">
 						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-th-list"></span></div>
 						<div class="col-md-8">
@@ -188,6 +188,23 @@
 						<div class="clearfix"></div>
 					</div>
 				</div>
+				<div class="col-md-3">
+					<div class="widget">
+						<div class="col-md-4"><span class="fs-4x glyphicon glyphicon-th"></span></div>
+						<div class="col-md-8">
+							<div class="row  text-right">
+								<div class="col-md-12 text-right">
+									Instances
+								</div>
+								<div id="qtd-instances"  class="col-md-12 fs-2x">
+									0
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+
 
 			</div>
 
@@ -226,16 +243,16 @@
 	<div class="col-md-6">
 		<div class="service">
 			<div class="row">
-				<div class="col-md-11">
+				<div class="col-md-10">
 					<h2 class="{{alert}}">{{name}}</h2>
 				</div>
-				<div class="col-md-1">
-					{{instances.length}}
+				<div class="col-md-2 text-right">
+					Instances: {{instances.length}}
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-9">
 					<div class="instance-container {{alert}}" id="{{name}}">
 						{{#instances}}
 						<a href="{{healthCheckUrl}}" target="_blank">
@@ -244,6 +261,10 @@
 						{{/instances}}
 						<div class="clearfix"></div>
 					</div>
+				</div>
+				<div class="col-md-3 text-right">
+					CPU: <span id="instance-{{name}}-cpu" x-value="0"></span><br />
+					<!--Memory: <span id="instance-{{name}}-mem">800 MB</span>-->
 				</div>
 			</div>
 		</div>
@@ -270,6 +291,7 @@
 
 
 <script src="config.js"></script>
+<script src="cpu-counter.js"></script>
 <script src="app.js"></script>
 <script>
 	INDEX.init();
