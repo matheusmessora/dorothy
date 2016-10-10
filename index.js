@@ -31,7 +31,7 @@ app.set('views', __dirname + '/views');
 // Initialize modules
 var eureka_host = (process.env.EUREKA_HOST || 'http://localhost:3001');
 var eureka_port = (process.env.EUREKA_PORT || '8761');
-var services = (process.env.SERVICES || 'APP1,APP2');
+var services = (process.env.SERVICES || 'SECURITY,DISCOVERY');
 var random = require('./src/randomService')();
 
 // Controllers
