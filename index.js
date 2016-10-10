@@ -3,18 +3,18 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'local';
 
 var express = require('express');
 var http = require('http');
+var path = require('path');
 
 var app = express();
-var path = require('path');
 
 app.set('port', (process.env.PORT || 3001));
 app.use(express.static('public'));
 
 // Initialize modules
 var eureka_host = (process.env.EUREKA_HOST || 'http://localhost:3001');
-
 var random = require('./src/randomService')();
 
+// Controllers
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+'/index.html'));
 });
@@ -31,22 +31,6 @@ app.get('/eureka/apps', function (req, res) {
 });
 
 app.get('/metric', function (req, res) {
-    // res.send(JSON.stringify({
-    //     "mem": 439208,
-    //     "mem.free": 110237,
-    //     "processors": 8,
-    //     "instance.uptime": 359289702,
-    //     "uptime": 359309540,
-    //     "systemload.average": random.randomInt(1, 100)/100
-    // }))
-    // res.send({
-    //     "mem": 439208,
-    //     "mem.free": 110237,
-    //     "processors": 8,
-    //     "instance.uptime": 359289702,
-    //     "uptime": 359309540,
-    //     "systemload.average": random.randomInt(1, 100)/100
-    // })
     var serviceUrl = req.query.url;
     console.log("/metric", serviceUrl);
     http.get(serviceUrl, (response) => {

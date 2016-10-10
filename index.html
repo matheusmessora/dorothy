@@ -19,6 +19,7 @@
 		body {
 			background-color: #000;
 			color: #FFF;
+			border-top: 2px solid #FB6900;
 		}
 		h1 {
 			text-align: center;
@@ -26,15 +27,15 @@
 
 		h2 {
 			text-align: center;
-			font-size: 1.5em;
+			font-size: 1.22em;
 			padding: 0;
 			margin: 0;
 		}
 		h2.warning {
-			color: #FB8C00;
+			color: #FB6900;
 		}
 		h2.danger {
-			color: #F44336;
+			color: #F63700;
 		}
 		h2.out-of-service {
 			font-size: 1.8em;
@@ -42,21 +43,29 @@
 
 		h3 {
 			text-align: center;
-			color: #F44336;
+			color: #F63700;
 		}
 
 		.glyphicon.danger {
-			color: #F44336;
+			color: #F63700;
 		}
+
+		.glyphicon-exclamation-sign {
+			color: #FB6900;
+		}
+		.glyphicon-fire {
+			color: #F63700;
+		}
+
 
 		.hexagon {
 			position: relative;
 			width: 45px;
 			height: 25.98px;
-			background-color: #2196F3;
+			background-color: #00B9BD;
 			margin: 12.99px 0;
-			border-left: solid 3px #CFD8DC;
-			border-right: solid 3px #CFD8DC;
+			border-left: solid 3px #004853;
+			border-right: solid 3px #004853;
 		}
 
 		.hexagon:before,
@@ -75,14 +84,10 @@
 
 		.hexagon:before {
 			top: -15.9099px;
-			border-top: solid 4.2426px #CFD8DC;
-			border-right: solid 4.2426px #CFD8DC;
 		}
 
 		.hexagon:after {
 			bottom: -15.9099px;
-			border-bottom: solid 4.2426px #CFD8DC;
-			border-left: solid 4.2426px #CFD8DC;
 		}
 
 
@@ -90,11 +95,21 @@
 			margin: 15px 3px;
 			float:left;
 		}
+		.hexagon:before {
+			border-top: solid 4.2426px #004853;
+			border-right: solid 4.2426px #004853;
+		}
+		.hexagon:after {
+			border-bottom: solid 4.2426px #004853;
+			border-left: solid 4.2426px #004853;
+		}
+
+
 		.hexagon.warning {
-			background-color: #EF6C00;
+			background-color: #FB6900;
 		}
 		.hexagon.danger {
-			background-color: #C62828;
+			background-color: #F63700;
 		}
 
 
@@ -115,14 +130,30 @@
 			margin-top: 10px;
 			color: #FFF;
 			width: 100%;
-			background-color: #01579B;
+			background-color: #004853;
 		}
 
+		.instance-info {
+			margin-top: 7px;
+			padding-top: 3px;
+			border-top: 1px solid #424242;
+			color: #F5F5F5;
+		}
+
+		.instance-cpu {
+			/*color: #00B9BD;*/
+		}
 		.fs-4x {
 			font-size: 4em;
 		}
 		.fs-2x {
 			font-size: 2em;
+		}
+
+		footer {
+			border-top: 1px solid #007E80;
+			margin-top: 25px;
+			padding-top: 14px;
 		}
 
 		#refresh {
@@ -232,27 +263,22 @@
 
 	<div class="row info-host-map host-map"></div>
 
-	<hr>
-
 	<footer>
 		<p>Powered by <a href="https://github.com/matheusmessora/dorothy">Dorothy</a> </p>
 	</footer>
 </div>
 
 <div id="application-map" style="display: none">
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<div class="service">
 			<div class="row">
-				<div class="col-md-10">
-					<h2 class="{{alert}}">{{name}}</h2>
-				</div>
-				<div class="col-md-2 text-right">
-					Instances: {{instances.length}}
+				<div class="col-md-12">
+					<h2>{{name}} <span class="glyphicon {{alert.icon}}"></span></h2>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="col-md-9">
+				<div class="col-md-12">
 					<div class="instance-container {{alert}}" id="{{name}}">
 						{{#instances}}
 						<a href="{{healthCheckUrl}}" target="_blank">
@@ -262,9 +288,17 @@
 						<div class="clearfix"></div>
 					</div>
 				</div>
-				<div class="col-md-3 text-right">
-					CPU: <span id="instance-{{name}}-cpu" x-value="0"></span><br />
-					<!--Memory: <span id="instance-{{name}}-mem">800 MB</span>-->
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="instance-info">
+						<div class="col-md-6">
+							<div class="instance-cpu" id="instance-{{name}}-cpu" x-value="0"></div>
+						</div>
+						<div class="col-md-6 text-right">
+							Instances: {{instances.length}}
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -276,13 +310,13 @@
 		<div class="service">
 			<div class="row">
 				<div class="col-md-12">
-					<h2 class="out-of-service">{{name}}</h2>
+					<h2 class="out-of-service">{{name}} <span class="glyphicon {{alert.icon}}"></span></h2>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-md-12">
-					<h3>OUT OF SERVICE&nbsp;<span class="glyphicon glyphicon-exclamation-sign danger"></span> </h3>
+					<h3>OUT OF SERVICE</h3>
 				</div>
 			</div>
 		</div>

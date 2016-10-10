@@ -15,7 +15,7 @@ var CPU = (function () {
         console.log("Instances Cores", instanceName, processors)
         var actualCores = Number($("#instance-" + instanceName + "-cpu").attr("x-value"));
         actualCores += processors;
-        $("#instance-" + instanceName + "-cpu").attr("x-value", actualCores).html(actualCores);
+        $("#instance-" + instanceName + "-cpu").attr("x-value", actualCores).html("CPU: " + actualCores);
     }
 
     function reset(){
