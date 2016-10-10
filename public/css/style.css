@@ -19,7 +19,6 @@ h2.danger {
     color: #F63700;
 }
 h2.out-of-service {
-    font-size: 1.8em;
 }
 
 h3 {
@@ -93,6 +92,19 @@ h3 {
     background-color: #F63700;
 }
 
+.card {
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #212121;
+    border-radius: 2px;
+    color: #FFF;
+}
+.card.warning {
+    background-color: #F63700;
+}
+.card.info {
+    background-color: #007E80;
+}
 
 .service {
     -webkit-transition: all 0.5s ease-in-out;
@@ -126,6 +138,9 @@ h3 {
 }
 .fs-4x {
     font-size: 4em;
+}
+.fs-3x {
+    font-size: 3em;
 }
 .fs-2x {
     font-size: 2em;
