@@ -5,8 +5,8 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var mustacheExpress = require('mustache-express');
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
+// var MongoClient = require('mongodb').MongoClient;
+// var assert = require('assert');
 
 
 var app = express();
