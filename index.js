@@ -15,13 +15,13 @@ app.set('port', (process.env.PORT || 3001));
 app.use(express.static('public'));
 
 // ######### MONGO
-var url = 'mongodb://192.168.99.100:27017/dorothy';
-MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
-    console.log("Connected successfully to MongoDB.", url);
-
-    db.close();
-});
+// var url = 'mongodb://192.168.99.100:27017/dorothy';
+// MongoClient.connect(url, function(err, db) {
+//     assert.equal(null, err);
+//     console.log("Connected successfully to MongoDB.", url);
+//
+//     db.close();
+// });
 
 // Register '.mustache' extension with The Mustache Express
 app.engine('mustache', mustacheExpress());
