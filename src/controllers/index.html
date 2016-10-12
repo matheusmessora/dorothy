@@ -182,10 +182,21 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="instance-info">
-						<div class="col-md-6">
+						<div class="col-md-3">
 							<div class="instance-cpu" id="instance-{{name}}-cpu" x-value="0"></div>
 						</div>
-						<div class="col-md-6 text-right">
+						<div class="col-md-2">Memory: </div>
+						<div class="col-md-3">
+							<div class="progress">
+								<div class="progress-bar" id="instance-{{name}}-mem" role="progressbar"
+								     x-mem-free="0"
+								     x-mem="0"
+								     aria-valuenow="0"
+								     aria-valuemin="0" aria-valuemax="100" style="width:0%">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 text-right">
 							Instances: {{instances.length}}
 						</div>
 					</div>
@@ -216,6 +227,7 @@
 
 <script src="config.js"></script>
 <script src="cpu-counter.js"></script>
+<script src="mem-counter.js"></script>
 <script src="app.js"></script>
 <script>
 	INDEX.init();

@@ -9,19 +9,11 @@ var mustacheExpress = require('mustache-express');
 // var assert = require('assert');
 
 
+
 var app = express();
 
 app.set('port', (process.env.PORT || 3001));
 app.use(express.static('public'));
-
-// ######### MONGO
-// var url = 'mongodb://192.168.99.100:27017/dorothy';
-// MongoClient.connect(url, function(err, db) {
-//     assert.equal(null, err);
-//     console.log("Connected successfully to MongoDB.", url);
-//
-//     db.close();
-// });
 
 // Register '.mustache' extension with The Mustache Express
 app.engine('mustache', mustacheExpress());
@@ -32,12 +24,23 @@ app.set('views', __dirname + '/views');
 var eureka_host = (process.env.EUREKA_HOST || 'http://localhost:3001');
 var eureka_port = (process.env.EUREKA_PORT || '8761');
 var services = (process.env.SERVICES || 'SECURITY,DISCOVERY');
+// var MONGO_DB = (process.env.MONGO_PORT_27017_TCP_ADDR || 'localhost');
 var random = require('./src/randomService')();
 
+
+// ######### MONGO
+// var url = 'mongodb://' + MONGO_DB + ':27017/dorothy';
+// MongoClient.connect(url, function(err, db) {
+//     assert.equal(null, err);
+//     console.log("Connected successfully to MongoDB ", url);
+//
+//     db.close();
+// });
+
+app.use(require('./src/controllers'))
+
 // Controllers
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname+'/index.html'));
-});
+
 
 app.get('/api/services', function (req, res) {
     res.send(services.split(","));

@@ -140,6 +140,7 @@ var INDEX = (function () {
 
 
                     CPU.countCores(instance.app, data.processors);
+                    MEMORY.countMem(instance.app, data.mem, data["mem.free"]);
                 })
             }
 
@@ -165,6 +166,7 @@ var INDEX = (function () {
         $('.info-host-map').html('');
 
         CPU.reset();
+        MEMORY.reset();
         getApps(function(err, data){
             if(err) {
                 console.error(err)
@@ -196,7 +198,7 @@ var INDEX = (function () {
             loadApplications();
             setInterval(function(){
                 loadApplications();
-            },300000);
+            },10000);
 
             bindRefreshButton();
         });
