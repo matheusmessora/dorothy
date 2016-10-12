@@ -198,7 +198,7 @@ var INDEX = (function () {
             loadApplications();
             setInterval(function(){
                 loadApplications();
-            },10000);
+            },30000);
 
             bindRefreshButton();
         });
