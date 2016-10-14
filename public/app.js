@@ -140,7 +140,7 @@ var INDEX = (function () {
 
 
                     CPU.countCores(instance.app, data.processors);
-                    MEMORY.countMem(instance.app, data.mem, data["mem.free"]);
+                    MEMORY.countMem(instance.app, data.heap, data["heap.used"]);
                 })
             }
 
@@ -198,7 +198,7 @@ var INDEX = (function () {
             loadApplications();
             setInterval(function(){
                 loadApplications();
-            },30000);
+            },300000);
 
             bindRefreshButton();
         });

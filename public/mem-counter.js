@@ -2,37 +2,39 @@ var MEMORY = (function () {
 
     var totalMem = 0;
 
-    function countMem(instanceName, mem, free) {
+    function countMem(instanceName, mem, used) {
         if(mem){
             totalMem += mem;
-            countInstance(instanceName, mem, free)
+            countInstance(instanceName, mem, used)
         }
     }
 
-    function countInstance(instanceName, mem, free){
-        var $2 = $("#instance-" + instanceName + "-mem");
+    function countInstance(instanceName, mem, used){
+        var $2 = $("#service-" + instanceName + "-mem");
 
+        var actualMemTotal = Number($2.attr("x-mem-total"));
         var actualMemFree = Number($2.attr("x-mem-free"));
-        var actualMem = Number($2.attr("x-mem"));
+        var actualMemUsed = Number($2.attr("x-mem-used"));
 
-        actualMem += mem;
-        actualMemFree += free;
+        actualMemTotal += mem;
+        actualMemUsed += used;
+        actualMemFree += actualMemTotal - actualMemUsed;
 
+        $2.attr("x-mem-total", actualMemTotal);
         $2.attr("x-mem-free", actualMemFree);
-        $2.attr("x-mem", actualMem);
+        $2.attr("x-mem-used", actualMemUsed);
 
 
-        var formattedMem = formatBytes(actualMem*1000, 0);
+        var formattedMem = formatBytes(actualMemUsed*1000, 0);
 
-        var percentage =actualMem * 100 / (actualMem + actualMemFree);
+        var percentage = actualMemUsed * 100 / actualMemTotal;
 
-        $2.attr("aria-valuenow", actualMem);
-        $2.attr("aria-valuemax", actualMem + actualMemFree);
-        $2.attr("aria-valuemax", actualMem + actualMemFree);
+        $2.attr("aria-valuenow", actualMemUsed);
+        $2.attr("aria-valuemax", actualMemTotal);
         $2.css("width", percentage + "%");
         $2.html(formattedMem);
 
-        console.log("Instances MEM", instanceName, mem, free, formattedMem, percentage)
+        console.log("service MEM", instanceName, mem, used, formattedMem, percentage)
     }
 
     function formatBytes(bytes,decimals) {
@@ -41,7 +43,7 @@ var MEMORY = (function () {
         var dm = decimals + 1 || 3;
         var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         var i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + '' + sizes[i];
     }
 
     function reset(){
