@@ -27,6 +27,10 @@ var services = (process.env.SERVICES || 'SECURITY,DISCOVERY');
 // var MONGO_DB = (process.env.MONGO_PORT_27017_TCP_ADDR || 'localhost');
 var random = require('./src/randomService')();
 
+const indexController = require('./src/controllers/index');
+const servicesController = require('./src/controllers/services');
+const metricController = require('./src/controllers/metric');
+const eurekaController = require('./src/controllers/eureka');
 
 // ######### MONGO
 // var url = 'mongodb://' + MONGO_DB + ':27017/dorothy';
@@ -37,72 +41,14 @@ var random = require('./src/randomService')();
 //     db.close();
 // });
 
-app.use(require('./src/controllers'))
+var configService = require('./src/lib/configuration/config');
+configService.changeEurekaHost(eureka_host, eureka_port);
 
-// Controllers
-
-
-app.get('/api/services', function (req, res) {
-    res.send(services.split(","));
-});
-
-app.get('/eureka-host', function(req, res){
-    res.send({
-        host: eureka_host
-    });
-});
-
-app.get('/eureka/apps', function (req, res) {
-    console.log("/eureka/apps");
-    var options = {
-        host: eureka_host,
-        path: '/eureka/apps',
-        port: eureka_port,
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }
-    };
-    http.get(options, (response) => {
-        console.log(`Got response: ${response.statusCode}`);
-
-        var body = '';
-        response.on('data', function(chunk) {
-            body += chunk;
-        });
-        response.on('end', function() {
-            console.log(body);
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.write(body);
-            res.end()
-        });
-    }).on('error', function(e) {
-        console.log("Got error: " + e.message);
-        res.sendStatus(404);
-    });
-});
-
-app.get('/metric', function (req, res) {
-    var serviceUrl = req.query.url;
-    console.log("/metric", serviceUrl);
-    http.get(serviceUrl, (response) => {
-        console.log(`Got response: ${response.statusCode}`);
-
-        var body = '';
-        response.on('data', function(chunk) {
-            body += chunk;
-        });
-        response.on('end', function() {
-            console.log(body);
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.write(body);
-            res.end()
-        });
-    }).on('error', function(e) {
-        console.log("Got error: " + e.message);
-        res.sendStatus(404);
-    });
-});
+// app.use('/', indexController.getServices);
+app.use('/', require('./src/controllers/index'));
+app.use('/api/services',  servicesController.getServices);
+app.use('/eureka/apps', eurekaController.getApps);
+app.use('/metric', metricController.getMetrics);
 
 app.listen(app.get('port'), function () {
     console.log('APP STARTED. NODE_ENV=' + process.env.NODE_ENV);
