@@ -65,9 +65,9 @@ exports.getApps = (req, res) => {
         });
         response.on('end', function () {
             adapt(body, json => res.send(json));
-
         });
     }).on('error', function (e) {
+        console.error("/eureka/apps ERROR", e);
         res.sendStatus(404);
     });
 };
