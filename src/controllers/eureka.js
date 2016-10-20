@@ -6,6 +6,7 @@ var mongo = require('../lib/database/mongo');
 
 
 function adapt(body, callback) {
+    console.log("[EUREKA] [APPS] adapt", body);
     var data = JSON.parse(body);
     var applications = data.applications.application;
 
@@ -42,13 +43,12 @@ function adapt(body, callback) {
                 instance.uid = instance.statusPageUrl.replace(/[^a-z0-9]/gi, '');
             }
         }
-
-        // });
         callback(result);
     });
 }
 
 exports.getApps = (req, res) => {
+    console.log("/eureka/apps");
     var options = {
         host: config.eurekaHost(),
         path: '/eureka/apps',

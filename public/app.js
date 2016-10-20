@@ -103,12 +103,8 @@ var INDEX = (function () {
                 var instance = instances[j];
 
                 getMetric(instance.homePageUrl + "metrics", instance, function(err, data, instance){
-                    if(err) {
-                        console.error(err)
-                        return;
-                    }
+                    if(err) {return;}
 
-                    // console.log(id, data['systemload.average'])
                     var cpuLoad = data['systemload.average'] * 100 / data.processors;
 
                     if(cpuLoad > 125){
