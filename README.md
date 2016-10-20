@@ -8,15 +8,21 @@ Dorothy provides a better way to visualize your Eureka services.
 ### as a Container
 
 ```
-docker run --name dorothy -e EUREKA_HOST=your_eureka-domain -e SERVICES=APP01,APP02,APP04,APP05 -d matheusmessora/dorothy
+docker run --name dorothy -e MONGO_PORT_27017_TCP_ADDR=localhost EUREKA_HOST=your_eureka-domain -e SERVICES=APP01,APP02,APP04,APP05 -d matheusmessora/dorothy
 ```
 
 ## Environment Variables
 
 ```
+MONGO_PORT_27017_TCP_ADDR
+```
+This variable is **mandatory** and specifies the host that will be used to connect to MongoDB.
+This variable will be set automatically if you use Docker Compose with [links](https://docs.docker.com/compose/compose-file/#/links) feature.
+
+```
 EUREKA_HOST
 ```
-This variable is mandatory and specifies the host that will be used to call the Eurea REST API.
+This variable is **mandatory** and specifies the host that will be used to call the Eurea REST API.
 
 ```
 SERVICES
