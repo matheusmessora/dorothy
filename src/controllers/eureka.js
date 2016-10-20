@@ -3,48 +3,63 @@ var path = require('path');
 var http = require('http');
 var config = require('../lib/configuration/config');
 var mongo = require('../lib/database/mongo');
+var notify = require('../lib/notify/notify');
 
 
 function adapt(body, callback) {
-    console.log("[EUREKA] [APPS] adapt", body);
     var data = JSON.parse(body);
-    var applications = data.applications.application;
 
-    var result = {
-        applications: {
-            application: applications
-        }
-    };
+    var result = [];
 
     mongo.findOne('settings', function (err, settings) {
-        for (var i = 0; i < applications.length; i++) {
-            var applicationName = applications[i].name;
-            var instances = applications[i].instance;
-            var alert = 'info';
-            var icon = '';
+        for (var i = 0; i < data.applications.application.length; i++) {
+            var dataApplication = data.applications.application[i];
 
-
-            settings.services.forEach(function (element, index, array) {
-                if (element.name === applicationName.toUpperCase()) {
-                    if (instances.length < element.instance) {
-                        alert = 'warning';
-                        icon = 'glyphicon-exclamation-sign'
-                    }
+            var application = {
+                name: dataApplication.name,
+                instances: [],
+                alert: {
+                    level: 'info',
+                    icon: ''
                 }
-            });
-            applications[i].instances = instances;
-            applications[i].alert = {
-                level: alert,
-                icon: icon
             };
 
-            for (var j = 0; j < instances.length; j++) {
-                var instance = instances[j];
-                instance.uid = instance.statusPageUrl.replace(/[^a-z0-9]/gi, '');
+            dataApplication.instance.forEach(function (element) {
+                var instance = {
+                    app: element.app,
+                    healthCheckUrl: element.healthCheckUrl,
+                    homePageUrl: element.homePageUrl,
+                    hostName: element.hostName,
+                    ipAddr: element.ipAddr,
+                    uid: element.statusPageUrl.replace(/[^a-z0-9]/gi, '')
+                };
+
+                application.instances.push(instance);
+            });
+
+            if(!isHighAvailable(settings, application)){
+                application.alert.level = 'warning';
+                application.alert.icon = 'glyphicon-exclamation-sign';
+                notify.notifyHA(application, application.instances.length);
             }
+
+            result.push(application);
         }
         callback(result);
     });
+}
+
+function isHighAvailable(settings, application){
+    var isHA = true;
+
+    settings.services.forEach(function (service) {
+        if (service.name === application.name) {
+            if (application.instances.length < service.instance) {
+                isHA = false;
+            }
+        }
+    });
+    return isHA;
 }
 
 exports.getApps = (req, res) => {
@@ -68,6 +83,6 @@ exports.getApps = (req, res) => {
         });
     }).on('error', function (e) {
         console.error("/eureka/apps ERROR", e);
-        res.sendStatus(404);
+        res.sendStatus(500);
     });
 };

@@ -69,15 +69,14 @@ var INDEX = (function () {
         });
     }
 
-    function count(data){
-        var applications = data.applications.application;
+    function count(applications){
 
         var hostSet = new Set();
         var totalInstances = 0;
         var totalApplications = applications.length;
 
         for (var i = 0; i < applications.length; i++) {
-            var instances = applications[i].instance;
+            var instances = applications[i].instances;
             for (var j = 0; j < instances.length; j++) {
                 var element = instances[j].hostName;
                 hostSet.add(element);
@@ -90,14 +89,13 @@ var INDEX = (function () {
         $("#qtd-applications").html(totalApplications);
     }
 
-    function hostMap(data) {
-        var applications = data.applications.application;
+    function hostMap(applications) {
 
         for (var i = 0; i < applications.length; i++) {
             let application = applications[i];
 
             remove(CONFIG.services, application.name);
-            var instances = application.instance;
+            var instances = application.instances;
 
             for (var j = 0; j < instances.length; j++) {
                 var instance = instances[j];
