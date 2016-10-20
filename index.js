@@ -5,7 +5,8 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var mustacheExpress = require('mustache-express');
-// var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb').MongoClient;
+var bodyParser = require('body-parser')
 // var assert = require('assert');
 
 
@@ -20,40 +21,59 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
 
+// bodyParser.urlencoded(options)
+// Parses the text as URL encoded data (which is how browsers tend to send form data from regular forms set to POST)
+// and exposes the resulting object (containing the keys and values) on req.body
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+// bodyParser.json(options)
+// Parses the text as JSON and exposes the resulting object on req.body.
+app.use(bodyParser.json());
+// app.use(express.bodyParser());
+
 // Initialize modules
 var eureka_host = (process.env.EUREKA_HOST || 'http://localhost:3001');
 var eureka_port = (process.env.EUREKA_PORT || '8761');
 var services = (process.env.SERVICES || 'SECURITY,DISCOVERY');
-// var MONGO_DB = (process.env.MONGO_PORT_27017_TCP_ADDR || 'localhost');
+var MONGO_DB = (process.env.MONGO_PORT_27017_TCP_ADDR || '192.168.99.100');
 var random = require('./src/randomService')();
 
-const indexController = require('./src/controllers/index');
+// Controllers
 const servicesController = require('./src/controllers/services');
 const metricController = require('./src/controllers/metric');
 const eurekaController = require('./src/controllers/eureka');
 
-// ######### MONGO
-// var url = 'mongodb://' + MONGO_DB + ':27017/dorothy';
-// MongoClient.connect(url, function(err, db) {
-//     assert.equal(null, err);
-//     console.log("Connected successfully to MongoDB ", url);
-//
-//     db.close();
-// });
+// Services
+const mongoService = require('./src/lib/database/mongo');
+const configService = require('./src/lib/configuration/config');
 
-var configService = require('./src/lib/configuration/config');
+
 configService.changeEurekaHost(eureka_host, eureka_port);
 
-// app.use('/', indexController.getServices);
+// app.use('/', indexController.getServices); --> THIS IS NOT WORKING
 app.use('/', require('./src/controllers/index'));
+app.use('/settings', require('./src/controllers/settings'));
+app.use('/api/settings', require('./src/controllers/settings-api'));
 app.use('/api/services',  servicesController.getServices);
 app.use('/eureka/apps', eurekaController.getApps);
 app.use('/metric', metricController.getMetrics);
 
-app.listen(app.get('port'), function () {
-    console.log('APP STARTED. NODE_ENV=' + process.env.NODE_ENV);
-    console.log('EUREKA_HOST=' + eureka_host);
-    console.log('EUREKA_PORT=' + eureka_port);
-    console.log('SERVICES=' + services.split(","));
-    console.log('Listening on port ' + app.get('port'));
+
+mongoService.connect({
+    host: MONGO_DB,
+    services: services
+}, function(err){
+    if(err) {
+        console.error("Failed to connect to MongoDB", err)
+    }else {
+        app.listen(app.get('port'), function () {
+            console.log('APP STARTED. NODE_ENV=' + process.env.NODE_ENV);
+            console.log('EUREKA_HOST=' + eureka_host);
+            console.log('EUREKA_PORT=' + eureka_port);
+            console.log('SERVICES=' + services.split(","));
+            console.log('Listening on port ' + app.get('port'));
+        });
+    }
 });

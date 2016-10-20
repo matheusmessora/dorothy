@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/matheusmessora/dorothy#readme",
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "cron": "^1.1.1",
     "express": "^4.14.0",
     "mustache-express": "^1.2.2"
   }

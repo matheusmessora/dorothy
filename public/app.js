@@ -94,34 +94,13 @@ var INDEX = (function () {
         var applications = data.applications.application;
 
         for (var i = 0; i < applications.length; i++) {
-            var applicationName = applications[i].name;
+            let application = applications[i];
 
-            remove(CONFIG.services, applicationName);
-            var instances = applications[i].instance;
-            var alert = 'info';
-            var icon = '';
-
-            if(instances.length == CONFIG.warning_threshold){
-                alert = 'warning';
-                icon = 'glyphicon-exclamation-sign'
-            } else if(instances.length == CONFIG.danger_threshold){
-                alert = 'danger';
-                icon = 'glyphicon-fire'
-            }
-
-            var json = {
-                name: applicationName,
-                instances: instances,
-                alert: {
-                    level: alert,
-                    icon: icon
-                }
-
-            };
+            remove(CONFIG.services, application.name);
+            var instances = application.instance;
 
             for (var j = 0; j < instances.length; j++) {
                 var instance = instances[j];
-                instance.uid = instance.statusPageUrl.replace(/[^a-z0-9]/gi,'');
 
                 getMetric(instance.homePageUrl + "metrics", instance, function(err, data, instance){
                     if(err) {
@@ -144,9 +123,9 @@ var INDEX = (function () {
                 })
             }
 
-            var rendered = Mustache.render(template, json);
+            var rendered = Mustache.render(template, application);
 
-            $('.' + json.alert.level + '-host-map').prepend(rendered)
+            $('.' + application.alert.level + '-host-map').prepend(rendered)
         }
     }
 
