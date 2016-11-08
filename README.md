@@ -1,7 +1,7 @@
 # Dorothy
 
 Dorothy provides a better way to visualize your Eureka services.
-Dorothy magically transform this:
+Dorothy magically turn this:
 
 ![Eureka dashboard](https://s3.amazonaws.com/doesuanota.com.br/img/Screen+Shot+2016-11-08+at+12.46.25+PM.png)
 
